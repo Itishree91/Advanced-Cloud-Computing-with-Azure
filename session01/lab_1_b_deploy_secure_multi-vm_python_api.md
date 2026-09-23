@@ -276,7 +276,7 @@ JUMPEOF
 
 ```bash
 # Create and deploy Flask API application on backend VM
-ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$FRONTEND_PUBLIC_IP" << 'JUMPEOF'
+ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$FRONTEND_PUBLIC_IP" << JUMPEOF
 ssh -i ~/.ssh/id_rsa $ADMIN_USER@$BACKEND_PRIVATE_IP << 'BACKENDEOF'
 # Create application directory
 mkdir -p ~/api-app
