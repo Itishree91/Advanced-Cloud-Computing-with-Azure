@@ -478,10 +478,17 @@ echo -e "\nTesting 404 page..."
 curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" "${WEBSITE_URL}nonexistent.html"
 
 # Open in browser
-if command -v xdg-open &> /dev/null; then
+if command -v open &> /dev/null; then
+  # macOS native open command
+  open "$WEBSITE_URL"
+elif command -v xdg-open &> /dev/null; then
+  # Linux desktop environment opener
   xdg-open "$WEBSITE_URL" &
 elif [ -n "$BROWSER" ]; then
+  # Fallback to explicit BROWSER env variable
   "$BROWSER" "$WEBSITE_URL" &
+else
+  echo "Could not detect a browser opener. URL is: $WEBSITE_URL"
 fi
 ```
 
