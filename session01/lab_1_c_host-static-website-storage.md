@@ -528,6 +528,8 @@ az storage account show \
 cd "$WEBSITE_DIR"
 
 sed -i 's/Deployed:/Updated:/g' index.html
+# For MacOs
+sed -i '' 's/Deployed:/Updated:/g' index.html
 
 # Upload updated file
 az storage blob upload \
