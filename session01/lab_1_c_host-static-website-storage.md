@@ -82,7 +82,7 @@ az storage blob service-properties update \
   --account-name "$STORAGE_ACCOUNT" \
   --static-website \
   --index-document "index.html" \
-  --error-document-404-path "404.html"
+  --404-document-404-path "404.html"
 
 # Get the primary web endpoint URL
 WEBSITE_URL=$(az storage account show \
