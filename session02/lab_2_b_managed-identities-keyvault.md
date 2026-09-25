@@ -278,7 +278,9 @@ except Exception as e:
 EOFPY
 
 # Replace placeholder with actual vault name
-sed -i "s/\$KEYVAULT_NAME/$KEYVAULT_NAME/g" get_secrets.py
+# sed -i "s/\$KEYVAULT_NAME/$KEYVAULT_NAME/g" get_secrets.py
+# Replace placeholder with actual vault name for Mac
+sed -i '' "s/\$KEYVAULT_NAME/$KEYVAULT_NAME/g" get_secrets.py
 
 # Run Python script
 echo "=== Running Python script ==="
