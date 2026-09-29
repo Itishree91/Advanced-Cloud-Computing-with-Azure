@@ -203,7 +203,7 @@ az ad sp create-for-rbac \
   --role "Contributor" \
   --scopes "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RG_NAME" \
   --cert "@${CERT_NAME}.pem" \
-  --create-cert
+ # --create-cert
 
 # Get certificate-based SP details
 SP_CERT_APP_ID=$(az ad sp list \
