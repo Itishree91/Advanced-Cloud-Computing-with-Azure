@@ -223,7 +223,8 @@ echo "Certificate-based SP App ID: $SP_CERT_APP_ID"
 az login --service-principal \
   --username "$SP_CERT_APP_ID" \
   --tenant "$SP_TENANT" \
-  --password "${CERT_NAME}.pem"
+  --certificate "${CERT_NAME}.pem"
+# --password "${CERT_NAME}.pem"
 
 # Verify authentication
 az account show \
