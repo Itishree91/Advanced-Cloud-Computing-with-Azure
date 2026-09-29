@@ -114,10 +114,12 @@ az account show \
   --query "{Subscription:name, User:user.name, Type:user.type}" \
   --output table
 
-# Test permissions - list resources in resource group
+# Test permissions - list resources in resource group if any
 az resource list \
   --resource-group "$RG_NAME" \
   --output table
+# Test permissions - show the resource group details
+az group show --name "$RG_NAME" --output json 
 
 # Logout from service principal
 az logout
