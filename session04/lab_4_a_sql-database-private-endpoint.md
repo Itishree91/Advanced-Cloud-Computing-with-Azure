@@ -285,7 +285,7 @@ echo "VM Public IP: $VM_PUBLIC_IP"
 
 ```bash
 # SSH to VM and install SQL tools
-ssh -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no "$ADMIN_USER@$VM_PUBLIC_IP" << 'EOFVM'
+ssh -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no "$ADMIN_USER@$VM_PUBLIC_IP" 'bash -s' << 'EOFVM'
 # Update packages
 sudo apt-get update -y
 
@@ -293,8 +293,8 @@ sudo apt-get update -y
 sudo apt-get install -y curl gnupg
 
 # Add Microsoft repository
-curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
-curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc > /dev/null
+curl -sSL https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list > /dev/null
 
 # Update and install SQL tools
 sudo apt-get update -y
@@ -305,9 +305,13 @@ echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 export PATH="$PATH:/opt/mssql-tools18/bin"
 
 # Verify installation
-sqlcmd -?
-
-echo "✅ SQL tools installed"
+if command -v sqlcmd &> /dev/null; then
+    sqlcmd -? | head -n 1
+    echo "✅ SQL tools installed successfully"
+else
+    echo "❌ SQL tools installation failed"
+    exit 1
+fi
 EOFVM
 ```
 
@@ -317,14 +321,14 @@ EOFVM
 
 ```bash
 # Test DNS resolution and connectivity from VM
-ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$VM_PUBLIC_IP" << EOFVM
+ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$VM_PUBLIC_IP" 'bash -i' << EOFVM
 # Test DNS resolution (should resolve to private IP)
 echo "=== DNS Resolution ==="
 nslookup ${SQL_SERVER}.database.windows.net
 
 # Test connection to SQL Server
 echo -e "\n=== Testing SQL Connection ==="
-sqlcmd -S ${SQL_SERVER}.database.windows.net -U ${SQL_ADMIN} -P '${SQL_PASSWORD}' -C -Q "SELECT @@VERSION;"
+sqlcmd -S "${SQL_SERVER}.database.windows.net" -U "${SQL_ADMIN}" -P '${SQL_PASSWORD}' -C -Q "SELECT @@VERSION;"
 
 if [ \$? -eq 0 ]; then
   echo "✅ Successfully connected to SQL Database via private endpoint"
