@@ -321,7 +321,8 @@ EOFVM
 
 ```bash
 # Test DNS resolution and connectivity from VM
-ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$VM_PUBLIC_IP" 'bash -i' << EOFVM
+ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$VM_PUBLIC_IP" << EOFVM
+export PATH="\$PATH:/opt/mssql-tools18/bin"
 # Test DNS resolution (should resolve to private IP)
 echo "=== DNS Resolution ==="
 nslookup ${SQL_SERVER}.database.windows.net
@@ -345,6 +346,7 @@ EOFVM
 ```bash
 # Create sample table and insert data
 ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$VM_PUBLIC_IP" << EOFVM
+export PATH="\$PATH:/opt/mssql-tools18/bin"
 # Connect and create table
 sqlcmd -S ${SQL_SERVER}.database.windows.net -d ${SQL_DB} -U ${SQL_ADMIN} -P '${SQL_PASSWORD}' -C << 'EOFSQL'
 CREATE TABLE Employees (
@@ -379,6 +381,7 @@ EOFVM
 ```bash
 # Run queries on the database
 ssh -i "$SSH_KEY_PATH" "$ADMIN_USER@$VM_PUBLIC_IP" << EOFVM
+export PATH="\$PATH:/opt/mssql-tools18/bin"
 echo "=== All Employees ==="
 sqlcmd -S ${SQL_SERVER}.database.windows.net -d ${SQL_DB} -U ${SQL_ADMIN} -P '${SQL_PASSWORD}' -C -Q "SELECT * FROM Employees;"
 
