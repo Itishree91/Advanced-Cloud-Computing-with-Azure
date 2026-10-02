@@ -407,10 +407,17 @@ az network private-endpoint-connection list \
   --output table
 
 # Get private IP address of endpoint
-az network private-endpoint show \
-  --name "$PE_NAME" \
+#az network private-endpoint show \
+ # --name "$PE_NAME" \
+ # --resource-group "$RG_NAME" \
+ # --query "customDnsConfigs[0].ipAddresses[0]" \
+ # --output tsv
+# Get private IP address of endpoint
+az network private-endpoint dns-zone-group show \
+  --endpoint-name "$PE_NAME" \
   --resource-group "$RG_NAME" \
-  --query "customDnsConfigs[0].ipAddresses[0]" \
+  --name "sql-dns-zone-group" \
+  --query "privateDnsZoneConfigs[0].recordSets[0].ipAddresses[0]" \
   --output tsv
 ```
 
